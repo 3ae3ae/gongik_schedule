@@ -79,6 +79,8 @@ void main() {
   runApp(const MaterialApp(home: MyApp()));
 }
 
+Random R = Random();
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -99,11 +101,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<String> mixUpOrder() {
-    Random R = Random();
     List<Pair> memberWithOrder = [];
     List<String> result = [];
-    for (String member in members) {
-      memberWithOrder.add(Pair(R.nextInt(100), member));
+    for (int i = 0; i < members.length; ++i) {
+      if (checkedMember[i]) {
+        memberWithOrder.add(Pair(R.nextInt(1000), members[i]));
+      }
     }
     memberWithOrder.sort((a, b) => a.value! - b.value!);
     for (Pair member in memberWithOrder) {
