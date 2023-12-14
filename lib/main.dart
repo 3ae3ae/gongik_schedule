@@ -56,18 +56,15 @@ String abcToName(int n, List<String> order) {
   for (int i = 0; i < n; ++i) {
     s = s.replaceAll(abc[i], order[i]);
   }
-  print(s);
   return s;
 }
 
 DataTable stringToDataTable(String input) {
   List<DataColumn> makeColumn(String input) {
-    print(input.split('|').map((e) => DataColumn(label: Text(e))).toList());
     return input.split('|').map((e) => DataColumn(label: Text(e))).toList();
   }
 
   DataRow makeRow(String input) {
-    print(input.split('|').map((e) => DataCell(Text(e))).toList());
     return DataRow(
         cells: input.split('|').map((e) => DataCell(Text(e))).toList());
   }
