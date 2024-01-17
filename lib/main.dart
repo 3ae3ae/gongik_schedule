@@ -76,7 +76,10 @@ DataTable stringToDataTable(String input) {
 }
 
 void main() {
-  runApp(const MaterialApp(home: MyApp()));
+  runApp(MaterialApp(
+    home: const MyApp(),
+    theme: ThemeData(useMaterial3: false),
+  ));
 }
 
 Random R = Random();
