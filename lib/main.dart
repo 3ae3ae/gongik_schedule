@@ -38,7 +38,8 @@ const List<String> schedules = [
   schedule3,
   schedule4,
   schedule5,
-  schedule6
+  schedule6,
+  ''
 ];
 
 class Pair {
@@ -92,8 +93,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final members = ['두원', '정빈', '형주', '성민', '재겸', '근호'];
-  List<bool> checkedMember = [false, false, false, false, false, false];
+  final members = ['두원', '정빈', '형주', '성민', '재겸', '근호', '형준'];
+  List<bool> checkedMember = [false, false, false, false, false, false, false];
   int workingMembers = 0;
 
   void Function() checkingMember(int n) {
