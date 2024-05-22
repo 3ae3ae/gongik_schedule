@@ -1,16 +1,35 @@
-# gongik_schedule
+# 공익 시간표
 
-A new Flutter project.
+## About
+
+경의선 숲길공원 사회복무요원들을 위한 시간표 생성 애플리케이션입니다.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK
+- Git
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installing
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+로컬에 프로젝트를 설치합니다.
+
+```
+git clone https://github.com/3ae3ae/gongik_schedule.git
+```
+
+의존성 패키지를 설치하고 실행합니다.
+
+```
+flutter pub get
+flutter run
+```
+
+## Usage
+
+이 앱은 [이곳](https://3ae3ae.github.io/gongik_schedule/)에서 사용할 수 있습니다.
+
+출근한 복무요원들을 선택해 시간표를 생성합니다.
+
+\+ 버튼을 눌러 구글시트에서 복무요원을 추가하거나 삭제할 수 있습니다.
