@@ -1,6 +1,12 @@
 import 'dart:math';
 
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 const schedule3 = '''|커뮤니티|대흥 순찰|새창 순찰|점심 교대
 10:00 ~ 11:30|A|B, C||
@@ -76,7 +82,21 @@ DataTable stringToDataTable(String input) {
   return DataTable(columns: col, rows: temps.map((e) => makeRow(e)).toList());
 }
 
-void main() {
+Future<Map<String, dynamic>> fetchNames() async {
+  final response = await http.get(Uri.parse(
+      'https://script.google.com/macros/s/AKfycbxaDh5OP-BGydVSiD1MvExE6KaB5Dup81MjhgTxw3nlfi_DxhJwC8gM8y0REY6_udoFgg/exec'));
+
+  if (response.statusCode == 200) {
+    Map<String, dynamic> l = jsonDecode(response.body);
+    List<String> members = List<String>.from(l['data']);
+    final checkedMember = List<bool>.generate(members.length, (index) => false);
+    return {'members': members, 'checkedMember': checkedMember};
+  } else {
+    throw Exception('Failed to load names');
+  }
+}
+
+void main() async {
   runApp(MaterialApp(
     home: const MyApp(),
     theme: ThemeData(useMaterial3: false),
@@ -93,9 +113,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final members = ['두원', '정빈', '형주', '성민', '재겸', '근호', '형준'];
-  List<bool> checkedMember = [false, false, false, false, false, false, false];
+  Uri url = Uri.parse(
+      'https://docs.google.com/spreadsheets/d/1U6hrcWxLr6UZVhYD7zQNm19nGDRZHFpg4JB-GQtvTEo/edit?usp=sharing');
+  List<String> members = [];
+  List<bool> checkedMember = [];
   int workingMembers = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchNames().then((data) {
+      setState(() {
+        members = data['members'];
+        checkedMember = data['checkedMember'];
+      });
+    });
+  }
 
   void Function() checkingMember(int n) {
     return () => setState(() {
@@ -121,27 +154,50 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("사회복무요원 근무표")),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
+    if (members.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("사회복무요원 근무표")),
+        body: const Center(child: CircularProgressIndicator()),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () async {
+            if (!await launchUrl(url)) {
+              throw Exception('Could not launch $url');
+            }
+          },
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(title: const Text("사회복무요원 근무표")),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () async {
+            if (!await launchUrl(url)) {
+              throw Exception('Could not launch $url');
+            }
+          },
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
               child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: List.generate(
-                members.length,
-                (n) => Member(
-                  checkMember: checkingMember(n),
-                  checked: checkedMember[n],
-                  name: members[n],
+                padding: const EdgeInsets.all(10),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: List.generate(
+                    members.length,
+                    (n) => Member(
+                      checkMember: checkingMember(n),
+                      checked: checkedMember[n],
+                      name: members[n],
+                    ),
+                  ),
                 ),
               ),
             ),
-          )),
-          SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: workingMembers >= 3
                   ? FittedBox(
                       child: stringToDataTable(
@@ -149,11 +205,47 @@ class _MyAppState extends State<MyApp> {
                   : const SizedBox(
                       width: 0,
                       height: 0,
-                    )),
-        ],
-      ),
-    );
+                    ),
+            ),
+          ],
+        ),
+      );
+    }
   }
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(title: const Text("사회복무요원 근무표")),
+  //     body: CustomScrollView(
+  //       slivers: [
+  //         SliverToBoxAdapter(
+  //             child: Padding(
+  //           padding: const EdgeInsets.all(10),
+  //           child: Wrap(
+  //             spacing: 8,
+  //             runSpacing: 8,
+  //             children: List.generate(
+  //               members.length,
+  //               (n) => Member(
+  //                 checkMember: checkingMember(n),
+  //                 checked: checkedMember[n],
+  //                 name: members[n],
+  //               ),
+  //             ),
+  //           ),
+  //         )),
+  //         SliverToBoxAdapter(
+  //             child: workingMembers >= 3
+  //                 ? FittedBox(
+  //                     child: stringToDataTable(
+  //                         abcToName(workingMembers, mixUpOrder())))
+  //                 : const SizedBox(
+  //                     width: 0,
+  //                     height: 0,
+  //                   )),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class Member extends StatefulWidget {
