@@ -196,7 +196,7 @@ class _MyAppState extends State<MyApp> {
     const Color darkSeedColor = Colors.deepOrange;
     final ThemeData lightTheme = ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: lightSeedColor, brightness: Brightness.light),
-      // useMaterial3: true,
+      useMaterial3: true,
     );
     final ThemeData darkTheme = ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: darkSeedColor, brightness: Brightness.dark),
