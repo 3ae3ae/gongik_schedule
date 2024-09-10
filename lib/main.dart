@@ -4,12 +4,20 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+const schedule2 = '''|커뮤니티|대흥 순찰|새창 순찰|점심 교대
+10:00 ~ 11:30|A|A, B||
+11:30 ~ 13:00||||B
+13:00 ~ 14:00|A|||
+14:00 ~ 15:00|B|||
+15:00 ~ 16:00|A|||
+16:00 ~ 17:00|B|||''';
+
 const schedule3 = '''|커뮤니티|대흥 순찰|새창 순찰|점심 교대
-10:00 ~ 11:30|A|B, C||
-11:30 ~ 13:00||||A
-13:00 ~ 14:30|B|||
-14:30 ~ 15:30|A|B, C||
-15:30 ~ 17:00|C|||''';
+10:00 ~ 11:30|C|A, B||
+11:30 ~ 13:00||||B
+13:00 ~ 14:30|C|||
+14:30 ~ 16:00|B||A, C|
+15:30 ~ 17:00|A|||''';
 
 const schedule4 = '''|커뮤니티|대흥 순찰|새창 순찰|점심 교대
 10:00 ~ 11:30|C|A, B||
@@ -67,7 +75,7 @@ const schedule6Heating = '''|커뮤니티|대흥 순찰|새창 순찰|점심 교
 const List<String> schedules = [
   '',
   '',
-  '',
+  schedule2,
   schedule3,
   schedule4,
   schedule5,
@@ -79,7 +87,7 @@ const List<String> schedules = [
 const List<String> schedulesHeating = [
   '',
   '',
-  '',
+  schedule2,
   schedule3Heating,
   schedule4Heating,
   schedule5Heating,
